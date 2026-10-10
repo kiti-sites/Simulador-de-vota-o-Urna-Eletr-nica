@@ -1,4 +1,4 @@
-\# Simulador de Votação — Reconstrução Experimental
+# Simulador de Votação — Reconstrução Experimental
 
 
 
@@ -10,31 +10,31 @@ O objetivo é estudar o funcionamento do simulador, recuperar recursos ausentes 
 
 
 
-> \*\*Aviso:\*\* este projeto é independente e não é um produto oficial do Tribunal Superior Eleitoral (TSE). A publicação deste código não implica endosso ou afiliação à Justiça Eleitoral.
+> **Aviso:** este projeto é independente e não é um produto oficial do Tribunal Superior Eleitoral (TSE). A publicação deste código não implica endosso ou afiliação à Justiça Eleitoral.
 
 
 
-\## Funcionalidades
+## Funcionalidades
 
 
 
-\- Interface web para selecionar cenários de votação.
+- Interface web para selecionar cenários de votação.
 
-\- Carregamento do motor WebAssembly (WASM).
+- Carregamento do motor WebAssembly (WASM).
 
-\- Execução local dos fluxos de treinamento disponíveis.
+- Execução local dos fluxos de treinamento disponíveis.
 
-\- Simulação de votos nominais e em branco.
+- Simulação de votos nominais e em branco.
 
-\- Navegação entre cargos e conclusão do treinamento.
+- Navegação entre cargos e conclusão do treinamento.
 
-\- Verificação automatizada da integridade dos arquivos.
+- Verificação automatizada da integridade dos arquivos.
 
-\- Validação dos pacotes de dados e de suas dependências.
+- Validação dos pacotes de dados e de suas dependências.
 
 
 
-\## Cenários disponíveis
+## Cenários disponíveis
 
 
 
@@ -42,21 +42,21 @@ A implementação foi testada com oito cenários:
 
 
 
-\- `municipal-t1` — eleições municipais, primeiro turno.
+- `municipal-t1` — eleições municipais, primeiro turno.
 
-\- `municipal-t2` — eleições municipais, segundo turno.
+- `municipal-t2` — eleições municipais, segundo turno.
 
-\- `geral-t1` — eleições gerais, primeiro turno.
+- `geral-t1` — eleições gerais, primeiro turno.
 
-\- `geral-t2` — eleições gerais, segundo turno.
+- `geral-t2` — eleições gerais, segundo turno.
 
-\- `geral-df-t1` — eleições gerais no Distrito Federal, primeiro turno.
+- `geral-df-t1` — eleições gerais no Distrito Federal, primeiro turno.
 
-\- `geral-df-t2` — eleições gerais no Distrito Federal, segundo turno.
+- `geral-df-t2` — eleições gerais no Distrito Federal, segundo turno.
 
-\- `geral-zz-t1` — cenário de eleições gerais identificado como `geral-zz-t1`.
+- `geral-zz-t1` — cenário de eleições gerais identificado como `geral-zz-t1`.
 
-\- Um cenário adicional conforme identificado no manifesto original.
+- Um cenário adicional conforme identificado no manifesto original.
 
 
 
@@ -64,19 +64,19 @@ Os cenários e seus metadados devem ser conferidos em `wasm/bases/manifest.json`
 
 
 
-\## Requisitos
+## Requisitos
 
 
 
-\- Python 3 instalado para executar um servidor HTTP local.
+- Python 3 instalado para executar um servidor HTTP local.
 
-\- Node.js instalado para executar o verificador de integridade.
+- Node.js instalado para executar o verificador de integridade.
 
-\- Navegador moderno com suporte a WebAssembly.
+- Navegador moderno com suporte a WebAssembly.
 
 
 
-\## Como executar
+## Como executar
 
 
 
@@ -124,7 +124,7 @@ Para encerrar o servidor, pressione `Ctrl+C` no terminal.
 
 
 
-\## Verificação de integridade
+## Verificação de integridade
 
 
 
@@ -148,7 +148,7 @@ Um resultado positivo indica que as verificações implementadas passaram. Isso 
 
 
 
-\## Estrutura do projeto
+## Estrutura do projeto
 
 
 
@@ -186,17 +186,17 @@ A estrutura acima é ilustrativa. Os nomes e diretórios devem corresponder aos 
 
 
 
-\## Limitações conhecidas
+## Limitações conhecidas
 
 
 
-\- A interface reproduz somente os fluxos que foram efetivamente testados.
+- A interface reproduz somente os fluxos que foram efetivamente testados.
 
-\- Funcionalidades internas identificadas no WASM podem não ser acessíveis pela interface web.
+- Funcionalidades internas identificadas no WASM podem não ser acessíveis pela interface web.
 
-\- Recursos de áudio e acessibilidade podem depender de arquivos adicionais.
+- Recursos de áudio e acessibilidade podem depender de arquivos adicionais.
 
-\- A compatibilidade pode variar conforme o navegador e o ambiente de execução.
+- A compatibilidade pode variar conforme o navegador e o ambiente de execução.
 
 
 
@@ -204,7 +204,7 @@ Não se deve presumir que encontrar uma função ou um estado interno no binári
 
 
 
-\## Integridade e procedência
+## Integridade e procedência
 
 
 
@@ -220,7 +220,7 @@ Os hashes SHA-256 registrados pelo projeto podem ser utilizados para verificar a
 
 
 
-\## Uso responsável
+## Uso responsável
 
 
 
@@ -232,7 +232,7 @@ Não representa uma urna eletrônica real, não transmite votos e não deve ser 
 
 
 
-\## Créditos
+## Créditos
 
 
 
