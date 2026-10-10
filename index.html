@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Simulador de votação — escolha o cenário</title>
+  <link rel="stylesheet" href="css/vota-wasm.css">
+  <script src="js/progress-navigation.js?v=20260715-scenario-header" defer></script>
+  <style>
+    .menu-wrap { max-width: 830px; margin: 18px auto; padding: 0 14px 40px; }
+    .menu-wrap h1 { font-size: 22px; }
+    .scenario-list { display: grid; gap: 10px; margin: 14px 0; }
+    .scenario-card { display: block; border: 1px solid var(--line); border-radius: 10px;
+      padding: 12px 14px; background: var(--paper); cursor: pointer; }
+    .scenario-card:hover { border-color: var(--accent); }
+    .scenario-card input { margin-right: 10px; }
+    .scenario-card .meta { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .scenario-card .desc { font-size: 14px; margin-top: 4px; }
+    .pill { display: inline-block; font-size: 12px; border-radius: 10px; padding: 1px 8px; margin-left: 8px; }
+    .pill.ok { background: #e2f2e8; color: #1c6b3f; border: 1px solid #1c6b3f; }
+    .pill.miss { background: #fbe7e7; color: #a12323; border: 1px solid #a12323; }
+    .scenario-card.unavailable { opacity: .65; cursor: not-allowed; }
+    .menu-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .btn-start { background: #db9736; color: #fff; border: 1px solid #db9736;
+      border-radius: 8px; padding: 12px 22px; font-size: 16px; cursor: pointer; }
+    .btn-start:disabled { opacity: .5; cursor: not-allowed; }
+    #menu-error { color: #a12323; min-height: 1.2em; }
+  </style>
+</head>
+<body class="home-body">
+  <header>
+    <div class="brand-row"></div>
+  </header>
+  <nav class="progress-navigation" data-current-step="1" aria-label="Etapas da simulação"></nav>
+
+  <main class="menu-wrap">
+    <h1>Simulador de votação — escolha o cenário</h1>
+    <p>Selecione o treinamento e clique em <strong>Iniciar votação</strong>.
+      O cenário <strong>municipal-t1</strong> é o padrão.</p>
+    <div id="scenario-list" class="scenario-list" role="radiogroup" aria-label="Cenários"></div>
+    <p id="menu-error" role="alert"></p>
+    <div class="menu-actions">
+      <button id="btn-start" class="btn-start" disabled>Iniciar votação</button>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+      const DEFAULT_ID = "municipal-t1";
+      const list = document.getElementById("scenario-list");
+      const btn = document.getElementById("btn-start");
+      const err = document.getElementById("menu-error");
+
+      function metaLine(s) {
+        return `Tipo: ${s.scenario || "-"} · Turno: ${s.turno ?? "-"} · ` +
+          `UF: ${(s.uf || "-").toUpperCase()} · PE: ${s.pe ?? "-"} · ` +
+          `Município/Zona/Seção: ${s.municipio ?? "-"}/${s.zona ?? "-"}/${s.secao ?? "-"} · ` +
+          `Fase: ${s.fase || "-"}`;
+      }
+
+      async function packageOk(s) {
+        try {
+          const r = await fetch(`wasm/bases/${s.dataJs}`, { cache: "no-store" });
+          return r.ok;
+        } catch (_) {
+          return false;
+        }
+      }
+
+      async function init() {
+        let manifest;
+        try {
+          const r = await fetch("wasm/bases/manifest.json", { cache: "no-store" });
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          manifest = await r.json();
+        } catch (e) {
+          err.textContent = "Não foi possível carregar a lista de cenários (wasm/bases/manifest.json).";
+          return;
+        }
+        const scenarios = manifest.scenarios || [];
+        const saved = localStorage.getItem("vota-wasm-cenario");
+        for (const s of scenarios) {
+          const ok = await packageOk(s);
+          const label = document.createElement("label");
+          label.className = "scenario-card" + (ok ? "" : " unavailable");
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "cenario";
+          radio.value = s.id;
+          radio.disabled = !ok;
+          if ((saved && saved === s.id && ok) || (!saved && s.id === DEFAULT_ID)) {
+            radio.checked = true;
+          }
+          const title = document.createElement("strong");
+          title.textContent = s.label || s.id;
+          const pill = document.createElement("span");
+          pill.className = "pill " + (ok ? "ok" : "miss");
+          pill.textContent = ok ? "disponível" : "pacote ausente";
+          const meta = document.createElement("div");
+          meta.className = "meta";
+          meta.textContent = metaLine(s);
+          const desc = document.createElement("div");
+          desc.className = "desc";
+          desc.textContent = s.description || "";
+          if (!ok) {
+            const warn = document.createElement("div");
+            warn.className = "meta";
+            warn.textContent = `Pacote ${s.data} não encontrado em wasm/bases/.`;
+            desc.append(warn);
+          }
+          label.append(radio, title, pill, meta, desc);
+          list.append(label);
+        }
+        if (!list.querySelector("input:checked")) {
+          const first = list.querySelector("input:not(:disabled)");
+          if (first) first.checked = true;
+        }
+        btn.disabled = !list.querySelector("input:checked");
+        list.addEventListener("change", () => {
+          btn.disabled = !list.querySelector("input:checked");
+          err.textContent = "";
+        });
+        btn.addEventListener("click", () => {
+          const sel = list.querySelector("input:checked");
+          if (!sel) {
+            err.textContent = "Escolha um cenário disponível para iniciar.";
+            return;
+          }
+          const s = scenarios.find((x) => x.id === sel.value);
+          localStorage.setItem("vota-wasm-cenario", s.id);
+          localStorage.setItem("vota-wasm-cenario-label", s.label || s.id);
+          window.location.href = "vota-wasm.html";
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
