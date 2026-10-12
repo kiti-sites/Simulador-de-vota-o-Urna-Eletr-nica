@@ -10,7 +10,7 @@ O objetivo é estudar o funcionamento do simulador, recuperar recursos ausentes 
 
 
 
-> **Aviso:** este projeto é independente e não é um produto oficial do Tribunal Superior Eleitoral (TSE). A publicação deste código não implica endosso ou afiliação à Justiça Eleitoral.
+> **Aviso:** este projeto é independente e não é um produto oficial do Tribunal Superior Eleitoral (TSE). A publicação deste código não implica endosso ou afiliação à Justiça Eleitoral. Nada aqui constitui uma alegação de fraude eleitoral: qualquer discrepância que você observar deve primeiro ser investigada como uma possível falha do próprio emulador ou da forma como ele é utilizado — trata-se de um emulador, e uma falha durante o uso provavelmente vem dele, não do VOTA, exceto nos casos documentados de outra forma (como o defeito na justificativa). É um projeto independente, sem vínculo com o TSE ou com a Justiça Eleitoral; os arquivos que ele gera não são resultados eleitorais autênticos, e as identidades de teste não são credenciais da Justiça Eleitoral.
 
 
 
